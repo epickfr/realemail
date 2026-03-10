@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title></title>
   <style>
     html, body {
       margin: 0;
@@ -35,9 +36,10 @@
   </style>
 </head>
 <body>
+  <div id="title"></div>
   <img
     id="trex"
-    src="https://static.wikia.nocookie.net/animal-revolt-battle-sim/images/4/4e/Tyrannosaurus_rex_or_T-rex_A.R.B.S..png/revision/latest?cb=20241103104814"
+    src="https://static.wikia.nocookie.net/dino/images/e/ec/Jurassic_Park_Tyrannosaurus_Rex_%281%29.png/revision/latest/scale-to-width-down/1200?cb=20221117060622"
     alt="T-Rex running"
   />
 
@@ -45,23 +47,20 @@
     window.addEventListener('load', () => {
       const trex = document.getElementById('trex');
 
-      let x = 100;
-      let y = 100;
-      let vx = 4;
-      let vy = 3;
       function startAnimation() {
-        const rect = trex.getBoundingClientRect();
-        let width = rect.width;
-        let height = rect.height;
+        let x = 100;
+        let y = 100;
+        let vx = 4;
+        let vy = 3;
 
-        function resetPosition() {
-          const w = window.innerWidth;
-          const h = window.innerHeight;
-          x = Math.random() * (w - width);
-          y = Math.random() * (h - height);
-        }
+        let width = trex.offsetWidth;
+        let height = trex.offsetHeight;
 
-        resetPosition();
+        x = Math.random() * (window.innerWidth - width);
+        y = Math.random() * (window.innerHeight - height);
+
+        trex.style.left = x + 'px';
+        trex.style.top = y + 'px';
 
         function animate() {
           const w = window.innerWidth;
@@ -69,7 +68,6 @@
 
           x += vx;
           y += vy;
-
           if (x <= 0 || x + width >= w) {
             vx = -vx;
             trex.style.transform = vx < 0 ? 'scaleX(-1)' : 'scaleX(1)';
@@ -86,19 +84,17 @@
         }
 
         window.addEventListener('resize', () => {
-          const w = window.innerWidth;
-          const h = window.innerHeight;
           width = trex.offsetWidth;
           height = trex.offsetHeight;
-
-          if (x + width > w) x = w - width;
-          if (y + height > h) y = h - height;
+          if (x + width > window.innerWidth) x = window.innerWidth - width;
+          if (y + height > window.innerHeight) y = window.innerHeight - height;
         });
+
         trex.style.transform = vx < 0 ? 'scaleX(-1)' : 'scaleX(1)';
         animate();
       }
 
-      if (trex.complete) {
+      if (trex.complete && trex.naturalWidth !== 0) {
         startAnimation();
       } else {
         trex.addEventListener('load', startAnimation);
@@ -107,3 +103,5 @@
   </script>
 </body>
 </html>
+
+If you still see a 404 for the image, double‑check that the `src` line in your file matches exactly (no extra spaces or changed `cb` value).
